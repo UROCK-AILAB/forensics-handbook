@@ -16,7 +16,7 @@ ESXi 는 호스트에서 일어난 일을 syslog 기능으로 로그 파일에 �
 |---|---|---|
 | `auth.log` | 로컬 시스템 인증과 관련된 모든 사건[1], ESXi Shell 인증 성공·실패[2] | 로그인 성공·실패, 비밀번호 변경[8][9] |
 | `hostd.log` | 호스트와 가상 머신을 관리·설정하는 에이전트(hostd)의 기록, 가상 머신과 호스트의 작업·이벤트[1][2] | SSH·콘솔·웹 콘솔 로그인, 계정 생성, 비밀번호 변경, 데이터스토어 파일 올리기·내려받기·지우기[8][9] |
-| `shell.log` | ESXi Shell 에 입력한 모든 명령과 셸을 켠 때 같은 셸 사건[1][2] | 셸에서 실행한 명령[8][9] |
+| `shell.log` | ESXi Shell 에 입력한 모든 명령과 셸을 켠 때 같은 셸 사건[1][2] | 셸에서 실행한 명령[8][9], SSH 켜기·끄기[11] |
 | `syslog.log` | 일반 로그 메시지, 관리 서비스 초기화, watchdog, 예약 작업, DCUI 사용[1][2] | DCUI(호스트 콘솔 화면) 로그인, SFTP 로 연 파일과 폴더[8][9] |
 | `vobd.log` | VMkernel 관찰 사건 (VMkernel Observation, VOB)[2] | SSH 세션 열기·닫기, 셸·SSH 켜기·끄기, 재부팅, 비밀번호 변경[8][9] |
 | `vmkernel.log` | 장치 탐색, 스토리지, 네트워크를 포함한 VMkernel 핵심 기록[2] | 받아들인 원격 연결, 설치 패키지에 없는 파일의 실행 거부[8][9] |
@@ -100,12 +100,31 @@ ESXi 8.0 부터 로그 형식이 ABNF 로 표준화됐고, vmsyslogd 가 쓰는 
 
 `vmkernel.log` 의 실행 거부 기록은 설치된 VIB (vSphere Installation Bundle) 에 들어 있지 않은 파일을 실행하려 할 때 남고, `execInstalledOnly` 설정이 켜져 있을 때만 생깁니다[8].
 
+SSH 를 켜고 들어가 SFTP 로 데이터스토어를 연 흐름은 `shell.log`, `auth.log`, `syslog.log` 에 다음 같은 줄로 남습니다[11]. 줄 모양은 침해 사고 사례의 로그를 따랐고, 시각·주소·계정·프로세스 번호는 만든 예시입니다.
+
+```
+# shell.log: SSH 를 끄고 켠 줄
+2026-03-02T09:10:05Z SSH: SSH login disabled
+2026-05-12T00:51:21Z SSH: SSH login enabled
+
+# auth.log: SSH 접속과 로그인
+2026-05-12T01:45:34Z sshd[5200101]: Connection from 192.0.2.25 port 50122
+2026-05-12T01:45:34Z sshd[5200101]: Accepted keyboard-interactive/pam for opsuser from 192.0.2.25 port 50122 ssh2
+2026-05-12T01:45:34Z sshd[5200101]: pam_unix(sshd:session): session opened for user opsuser by (uid=0)
+
+# syslog.log: SFTP 로 /vmfs 를 조회한 줄
+2026-05-12T01:56:42Z sftp-server[5200105]: statvfs "vmfs"
+2026-05-12T01:56:47Z sftp-server[5200105]: opendir "vmfs"
+```
+
+`shell.log` 에서 `SSH login disabled` 줄 뒤에 나온 `SSH login enabled` 줄을 찾으면, 꺼 두었던 SSH 를 언제 다시 켰는지 알 수 있습니다[11]. 평소 SSH 를 꺼 두고 운영했는지는 관리 담당자에게 확인합니다[11]. `auth.log` 의 세 줄은 sshd 프로세스 번호가 같아서 한 접속으로 묶이고, 원격 주소와 포트, 인증 방식(`keyboard-interactive/pam`), 로그인한 계정이 남습니다[11]. `sftp-server` 줄은 sshd 와 다른 프로세스 번호로 남을 수 있어서 시각 순서로 SSH 세션과 이어 봅니다[11]. `statvfs "vmfs"` 와 `opendir "vmfs"` 는 SFTP 로 `/vmfs` 를 조회한 줄이고, 뒤따르는 `open`·`close` 줄에는 연 파일 경로와 읽고 쓴 바이트 수가 남습니다[11]. ESXi 에서 랜섬웨어를 실행하지 않고, Windows PC 에서 SSHFS 로 ESXi 파일 시스템을 드라이브처럼 연결해 암호화한 사례에서도 파일을 읽고 다시 쓰고 이름을 바꾼 기록이 이 `sftp-server` 줄로 남았습니다[11].
+
 ## 증거로서 의미
 
 ### 증명하는 것
 
 - 호스트 시계 기준으로 그 시각에 그 계정의 로그인·로그아웃·로그인 실패가 기록됐다는 것(`auth.log`, `hostd.log`, `vobd.log`). `hostd.log` 의 `User ...@(IPv4 주소) logged in` 메시지에는 원격 주소도 함께 남습니다[9].
-- SSH 나 ESXi Shell 을 켜고 끈 시각(`vobd.log`, `hostd.log`), 셸에 입력한 명령(`shell.log`)[1][9].
+- SSH 나 ESXi Shell 을 켜고 끈 시각(`vobd.log`, `hostd.log`), 셸에 입력한 명령(`shell.log`)[1][9]. SSH 를 켜고 끈 사건은 `shell.log` 에도 `SSH: SSH login enabled`·`SSH: SSH login disabled` 줄로 남습니다[11].
 - 계정을 만들거나 비밀번호를 바꾼 사건, 웹 콘솔이나 데이터스토어 브라우저로 파일을 올리고 내려받고 지운 사건(`hostd.log`)[8][9].
 - SFTP 로 연 폴더와 파일(`syslog.log` 의 `sftp-server` 줄)[9].
 - 호스트가 켜지고 꺼진 시각과, 한 시간마다의 heartbeat 가 끊긴 구간(`vmksummary.log`)[2].
@@ -144,7 +163,7 @@ ESXi 로그는 텍스트라서 원문으로 읽습니다.
 1. 지원 번들을 받습니다. ESXi 콘솔이나 SSH 에서 `vm-support` 를 실행하면 .tgz 파일이 생기고, `-w` 를 주지 않으면 `/var/tmp/`, `/var/log/`, 현재 폴더, VMFS·VFFS 파티션 가운데 한 곳에 저장됩니다[7]. `vm-support -w /vmfs/volumes/DATASTORE_NAME` 으로 데이터스토어를 지정하거나, 조사 PC 에서 `ssh root@ESXHostnameOrIPAddress vm-support -s > vm-support-Hostname.tgz` 로 표준 출력을 받아 바로 저장할 수 있습니다[7]. vSphere Client 나 `https://ESXHostnameOrIPAddress/cgi-bin/vm-support.cgi` 로도 받습니다[7].
 2. 번들을 풀기 전에 `tar -tzvf` 로 목록을 보고 `var/run/log`, `scratch/log` 아래 파일과 크기·수정 시각을 기록합니다.
 3. 로그 종류마다 회전본을 포함해 오래된 순서로 이어 붙입니다. `zcat -f vobd.*.gz vobd.log` 처럼 쓰면 압축 파일과 평문 파일을 함께 읽습니다. 회전본을 잇는 순서는 파일마다 첫 줄과 마지막 줄의 시각을 보고 정합니다.
-4. 위 표의 메시지 앞부분을 대소문자 구분 없이 검색합니다. 예를 들어 `grep -i -E "SSH access has been|command line shell has been|SSH session was opened" vobd.log hostd.log` 로 SSH·셸을 켠 시각과 세션을 뽑고, 그 시각 전후의 `shell.log` 와 `auth.log` 줄을 봅니다.
+4. 위 표의 메시지 앞부분을 대소문자 구분 없이 검색합니다. 예를 들어 `grep -i -E "SSH access has been|command line shell has been|SSH session was opened" vobd.log hostd.log` 로 SSH·셸을 켠 시각과 세션을 뽑고, `grep "SSH: SSH login" shell.log` 로 `shell.log` 에 남은 SSH 켜기·끄기 줄도 함께 봅니다. 그 시각 전후의 `shell.log` 와 `auth.log` 줄을 봅니다.
 5. `vmksummary.log` 에서 heartbeat 가 한 시간 넘게 빈 구간과 호스트 시작·종료 기록을 찾아, 그 구간에 다른 로그도 비어 있는지 비교합니다.
 
 ### 공개 도구로 한 번
@@ -164,6 +183,7 @@ ESXi 로그는 텍스트라서 원문으로 읽습니다.
 | 가상 머신 폴더의 `vmware.log` | 가상 머신 전원 사건과 가상 하드웨어 변경 시각[1] | — |
 | 리눅스 서버의 인증 로그 | ESXi 에 접속한 관리 서버나 점프 서버에서 나간 SSH 접속 | [인증 로그](../logins/auth-log.md) |
 | 리눅스 서버의 랜섬웨어 흔적 | 같은 사건에서 리눅스 서버에 남은 실행·암호화 흔적 | [랜섬웨어가 돌았나](../../04-scenarios/intrusion/ransomware.md) |
+| 접속 출발지인 관리용 PC | 다른 PC 에서 SSH·SFTP 로 데이터스토어를 암호화했을 때 PC 와 ESXi 를 오가며 보는 순서 | [랜섬웨어가 돌았나](../../04-scenarios/intrusion/ransomware.md) |
 | 다른 하이퍼바이저 | KVM 호스트에서 같은 질문을 풀 때 볼 로그 | [가상 머신 (KVM·libvirt)](../containers/kvm-libvirt.md) |
 
 ## 실습
@@ -188,3 +208,4 @@ ESXi 로그는 텍스트라서 원문으로 읽습니다.
 8. Phalgun Kulkarni, "Parsing ESXi Logs for Incident Response", LevelBlue SpiderLabs Blog (2025-02-10). https://www.levelblue.com/blogs/spiderlabs-blog/parsing-esxi-logs-for-incident-response
 9. Stroz Friedberg, QELP, README.md·src/qelp/esxi_to_csv.py·src/qelp/support.py. https://github.com/strozfriedberg/qelp
 10. ANSSI, DFIR4vSphere, README.md·dfir4vsphere/Start-ESXi_Investigation.ps1·Start-VC_Investigation.ps1. https://github.com/ANSSI-FR/DFIR4vSphere
+11. KISA, "2026년 상반기 침해사고 원인분석 및 대응조치 서비스 동향보고서 - 가상화 인프라 타겟 공격과 대응방안" (2026-08-21). https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000127&menuNo=205021&nttId=72167

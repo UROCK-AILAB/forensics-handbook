@@ -34,6 +34,8 @@ nav_order: 3770
 
 공격자는 대상 시스템이나 네트워크의 많은 시스템에서 데이터를 암호화해 쓸 수 없게 만듭니다[1]. 흔히 암호화되는 파일은 오피스 문서, PDF, 이미지, 동영상, 음성, 텍스트, 소스 코드이고, 이름이 바뀌거나 특정 표시가 붙는 경우가 많습니다[1]. 시스템 파일, 디스크 파티션, MBR 을 암호화하는 경우도 있고, ESXi 같은 하이퍼바이저의 가상 머신을 암호화하기도 합니다[1]. ESXi 호스트에 남는 로그는 [VMware ESXi 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/servers/esxi-logs.html) 에서 다룹니다.
 
+ESXi 의 가상 머신이 암호화됐어도 랜섬웨어가 ESXi 안에서 실행됐다고 단정하지 않습니다. 2026년 상반기 국내 사고에서는 ESXi 를 관리하던 Windows 7 PC 에 WinFsp 와 SSHFS-Win 이 MSI 로 설치됐고, 이 PC 에서 실행한 Windows 용 랜섬웨어가 SSHFS·SFTP 로 연결한 ESXi 파일시스템(VMFS)의 파일을 암호화했습니다[4]. 이 PC 에서는 두 도구의 MSI 설치 파일이 지워졌지만 Program Files 아래(SSHFS-Win 은 `C:\Program Files\SSHFS-Win\`)에 설치된 프로그램은 남아 있었습니다[4]. 그래서 하이퍼바이저가 암호화된 사고에서 관리용 PC 에 SSHFS-Win·WinFsp 설치 흔적이 있으면, 암호화를 ESXi 안이 아니라 이 PC 에서 원격으로 했을 수 있다는 단서로 보고 이 PC 도 수집 범위에 넣습니다. 설치 흔적은 [프로그램 설치·삭제 이벤트](../../02-artifacts/event-logs/msiinstaller.md) 와 [설치 프로그램](../../02-artifacts/system-account/uninstall.md) 에서 확인합니다. Linux 서버가 암호화됐을 때의 조사 순서는 [Linux 랜섬웨어 시나리오](https://urock-ailab.github.io/forensics-handbook/linux/04-scenarios/intrusion/ransomware.html) 에서 다룹니다.
+
 퍼뜨릴 때는 유효 계정 (Valid Accounts), 운영체제 자격 증명 덤프 (OS Credential Dumping), SMB·Windows 관리 공유 (SMB/Windows Admin Shares) 같은 다른 기법을 씁니다[1]. 바탕 화면 바꾸기 같은 내부 훼손이나, 연결된 프린터로 랜섬노트를 뿌리는 일도 듭니다[1].
 
 탐지할 때는 드문 확장자로 파일 쓰기가 짧은 시간에 몰리는 모양을 보고, 뒤이은 랜섬노트 생성, 레지스트리 변경, 섀도 복사본 삭제를 함께 봅니다[1]. 이때 vssadmin·wbadmin·cipher·PowerShell 같은 명령줄 도구를 흔히 씁니다[1].
@@ -145,3 +147,4 @@ WMIEXEC 는 wmiprvse.exe 가 부모인 `cmd.exe /Q /c … 1> \\127.0.0.1\{공유
 1. MITRE ATT&CK, "Data Encrypted for Impact, Technique T1486" (v1.5, 2026-05-12 수정) — https://attack.mitre.org/techniques/T1486/
 2. MITRE ATT&CK, "Inhibit System Recovery, Technique T1490" (v1.6, 2026-05-12 수정) — https://attack.mitre.org/techniques/T1490/
 3. The DFIR Report, "From ScreenConnect to Hive Ransomware in 61 hours" (2023-09-25) — https://thedfirreport.com/2023/09/25/from-screenconnect-to-hive-ransomware-in-61-hours/
+4. 한국인터넷진흥원(KISA), "2026년 상반기 침해사고 원인분석 및 대응조치 서비스 동향보고서 - 가상화 인프라 타겟 공격과 대응방안" (2026-08-21) — https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000127&menuNo=205021&nttId=72167

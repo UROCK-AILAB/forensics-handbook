@@ -10,6 +10,12 @@ nav_exclude: true
 
 [첫 화면으로 돌아가기](index.md)
 
+## 2026-10-01
+
+- Windows: [저장 비밀번호 (Login Data)](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/login-data.html)에 동기화된 패스키 내용을, [WMI 영구 이벤트 구독](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/persistence/wmi-event-subscription.html)에 시각 조건으로 실행되는 구독 내용을, [랜섬웨어는 언제 어떻게 퍼졌나](https://urock-ailab.github.io/forensics-handbook/windows/04-scenarios/incident/ransomware.html)에 관리용 PC 의 SSHFS-Win·WinFsp 흔적 내용을 추가했습니다.
+- Linux: [랜섬웨어가 돌았나](https://urock-ailab.github.io/forensics-handbook/linux/04-scenarios/intrusion/ransomware.html)에 ESXi 데이터스토어가 암호화됐을 때의 조사 흐름을, [VMware ESXi 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/servers/esxi-logs.html)에 SSH 켜짐·SFTP 데이터스토어 탐색 로그 예시를 추가했습니다.
+- Android: [디지털 웰빙](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/app-usage/digital-wellbeing.html)에 삼성 디지털 웰빙의 시간대 변경 기록 내용을 추가했습니다.
+
 ## 2026-09-30
 
 - Windows: Windows 11 26H2 에 맞춰 [사용자 프로필 목록](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/system-account/profilelist.html)에 관리자 보호 내용을, [섀도 복사본 활용](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/volume-shadow-copy-analysis.html)에 특정 시점 복원 내용을, [윈도 검색 색인 DB](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/file-folder-usage/windows-search/index.html)에 자주 쓰는 폴더 자동 색인 내용을, [드라이버 항목](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/execution/amcache-hve/inventorydriverbinary.html)에 교차 서명 드라이버 신뢰 제거 내용을, [다른 PC 에서 원격 실행했나](https://urock-ailab.github.io/forensics-handbook/windows/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.html)에 WMIC 제거 내용을 추가했습니다.

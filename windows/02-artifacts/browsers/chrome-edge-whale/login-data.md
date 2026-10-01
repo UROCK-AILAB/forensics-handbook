@@ -214,6 +214,74 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 - 다른 폴더에 `Login Data` 라는 이름의 파일이 생겼다가 지워진 기록을 [$UsnJrnl](../../filesystem/usnjrnl.md)에서 찾습니다.
 - 브라우저가 아닌 프로그램이 실행된 흔적과 탐지 기록을 봅니다. 흐름은 [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md)를 따릅니다.
 
+## 동기화된 패스키 (Sync Data·passkey_enclave_state)
+
+Google 비밀번호 관리자 (Google Password Manager) 는 비밀번호뿐 아니라 패스키 (Passkey) 도 Google 계정에 동기화합니다. Windows 용 Chrome 은 이 패스키를 `Login Data` 가 아니라 프로필 폴더의 동기화 저장소에 두고, 이 기기를 Google 의 패스키 처리 서버(격리된 클라우드 환경, enclave)에 등록한 상태는 따로 `passkey_enclave_state` 파일에 둡니다[7]. 2026년 8월에 공개된 연구에서, 관리자 권한 없이 도는 악성코드가 이 두 곳의 자료와 Chrome 메모리, Windows 암호화 API 를 써서 사용자 확인 (User Verification) 없이 유효한 패스키 인증 응답을 만들 수 있다는 점이 드러났습니다[7]. 그래서 두 곳은 계정에 어떤 패스키가 있었는지 확인하는 자료이면서, 침해 조사에서 누가 건드렸는지 살펴볼 파일이기도 합니다.
+
+| 위치 (프로필 폴더 기준) | 들어 있는 것 |
+|---|---|
+| `Sync Data\LevelDB\` | 동기화된 패스키마다 `WebauthnCredentialSpecifics` 레코드가 하나씩 있습니다. 키는 `webauthn_credential-dt-` 뒤에 `sync_id` 를 붙인 모양이고, 계정 저장소면 앞에 `A-` 가 붙습니다[7][8] |
+| `passkey_enclave_state` | Google 계정마다 이 기기의 키와 등록 상태를 적은 파일입니다[9] |
+
+### Sync Data 의 패스키 레코드
+
+폴더는 LevelDB 형식이라서 파일을 읽는 법은 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md)를 따릅니다. 값은 `WebauthnCredentialSpecifics` protobuf 이고, 개인 키와 확장 기능용 비밀 값이 든 필드만 보안 도메인 키로 암호화돼 있으며 사이트·계정 이름·시각은 LevelDB 를 풀어 읽으면 그대로 보입니다[7][8]. 이 레코드를 읽는 데 관리자 권한이 필요하지 않습니다[7].
+
+| 번호 | 필드 | 뜻 |
+|---|---|---|
+| 2 | `credential_id` | 사이트에 전달되는 자격 증명 ID. 무작위 16바이트입니다 |
+| 3 | `rp_id` | 패스키를 쓰는 사이트. 보통 도메인 이름입니다 |
+| 4 | `user_id` | 사이트가 붙인 사용자 ID. 최대 64바이트입니다 |
+| 6 | `creation_time` | 패스키를 만든 때 |
+| 7, 8 | `user_name`, `user_display_name` | 계정 이름(보통 메일 주소)과 표시 이름. 사용자가 고치면 `edited_by_user`(15) 가 true 가 됩니다 |
+| 13 | `last_used_time_windows_epoch_micros` | 마지막으로 쓴 때 |
+| 16, 17 | `hidden`, `hidden_time` | 인증 화면에 보이지 않게 숨긴 패스키(사이트가 더 쓰지 않는다고 알린 경우 등)와 숨긴 때 |
+| 9, 12, 19 | `private_key`, `encrypted`, `security_domain_encrypted` | 암호화한 개인 키. 12, 19 에는 개인 키와 함께 확장 기능용 비밀 값도 들어갑니다. 셋 가운데 하나만 있습니다 |
+
+protobuf 로 읽을 때 `rp_id` 는 태그 바이트 `1A`, `user_name` 은 `3A`, `creation_time` 은 `30` 으로 시작합니다[8]. 레코드에는 패스키를 만든 기기를 적는 필드가 없습니다[8].
+
+### passkey_enclave_state
+
+Chrome 은 `EnclaveLocalState` protobuf 뒤에 `82 40 20` 과 SHA-256 값 32바이트를 붙이고, 이것을 쿠키·비밀번호와 같은 브라우저 암호화 계층으로 한 번 더 암호화해서 씁니다[9]. 그래서 키 없이는 파일이 있다는 것과 파일시스템 시각만 알 수 있고, 키를 푸는 방식은 [쿠키·비밀번호 암호화](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다. 풀어 낸 내용에는 Google 계정 ID 마다 아래 필드가 있습니다[9].
+
+| 필드 | 뜻 |
+|---|---|
+| `wrapped_identity_private_key`, `identity_public_key` | 사용자 확인 없이 쓰는 기기 키. 개인 키는 Windows 암호화 API 로 TPM 이 감싼 값입니다[7]. `identity_key_is_software_backed` 가 true 면 하드웨어에 묶이지 않은 키입니다 |
+| `device_id` | 기기 ID. 현재는 `identity_public_key` 의 SHA-256 값입니다 |
+| `wrapped_uv_private_key`, `uv_public_key` | 사용자 확인(Windows Hello 등)과 묶인 기기 키. 지원하지 않는 기기에는 없습니다 |
+| `registered`, `joined` | 이 기기를 등록했는지, 보안 도메인에 들어갔는지 |
+| `wrapped_security_domain_secrets` | 보안 도메인 비밀을 enclave 가 감싼 값. 버전마다 하나씩 있습니다 |
+| `wrapped_pin` | Google 비밀번호 관리자 PIN 을 감싼 값과 PIN 형식(6자리·임의 문자열) |
+| `deferred_uv_key_creation` | 등록은 했지만 사용자 확인 키를 아직 만들지 않은 상태 |
+| `last_refreshed_pin_epoch_secs` | PIN 을 마지막으로 갱신한 때 |
+
+끝의 SHA-256 값이 맞지 않거나 protobuf 를 읽지 못하면 Chrome 은 내용을 버리고 빈 상태로 시작하므로, 사용자는 이 기기를 다시 등록해야 합니다[9].
+
+### 증명하는 것과 증명하지 못하는 것
+
+| 증명하는 것 | 증명하지 못하는 것 |
+|---|---|
+| 이 프로필의 Google 계정에 이 사이트(`rp_id`)·계정 이름의 패스키가 동기화돼 있었습니다 | 이 PC 에서 패스키를 만들었는지. 다른 기기에서 만든 패스키도 동기화로 들어옵니다 |
+| Chrome 이 인증에 이 패스키를 고른 마지막 때(`last_used_time_windows_epoch_micros`)가 있습니다 | 사이트가 로그인을 받아들였는지, 어느 기기에서 썼는지. 이 값도 동기화로 옮겨 옵니다. 또 Chrome 이 인증 요청을 처리하면서 고치는 값이라, Chrome 밖에서 기기 키를 쓴 인증은 알 수 없습니다[8] |
+| `passkey_enclave_state` 가 있으면 이 프로필에서 동기화 패스키용 기기 키를 만들거나 등록 상태를 적은 적이 있습니다[9] | 인증할 때 사용자 확인을 거쳤는지. 두 곳 모두 이것을 적는 필드가 없습니다 |
+| 풀어 낸 `passkey_enclave_state` 에서 `registered` 가 true 인 Google 계정은 이 기기를 enclave 에 등록했습니다[9] | 파일이 있다는 것만으로 등록을 마쳤는지. 기기 키를 만든 뒤 등록하기 전에도 파일을 씁니다[9] |
+
+패스키로 어느 사이트에 언제 로그인했는지는 이 두 곳만으로 단정하지 않고, 사이트나 계정 제공자 쪽 로그인 기록과 [방문 기록 (History)](history.md)을 함께 봅니다.
+
+### 시각 해석
+
+| 필드 | 형식 | 기록되는 때 |
+|---|---|---|
+| `creation_time`, `hidden_time` | 1970-01-01 UTC 부터 센 밀리초 | 패스키를 만든 기기, 숨긴 기기의 시계로 적습니다[8] |
+| `last_used_time_windows_epoch_micros` | 1601-01-01 UTC 부터 센 마이크로초 (`Login Data` 와 같은 WebKit 시각) | 사용자가 패스키를 고른 뒤 Chrome 이 enclave 에 서명을 요청하기 직전의 시각입니다[8]. 필드가 없는 레코드도 있습니다 |
+| `last_refreshed_pin_epoch_secs` | 1970-01-01 UTC 부터 센 초 (실수) | PIN 을 갱신한 때 |
+
+같은 패스키의 예전 `last_used_time_windows_epoch_micros` 값이 `.log`·`.ldb` 파일에 한동안 남을 수 있습니다. 예전 값이 남고 사라지는 방식은 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md)에서 다룹니다.
+
+### 탐지 단서
+
+두 곳은 브라우저 프로세스만 다뤄야 하는 파일입니다[7]. 그래서 `chrome.exe` 가 아닌 프로세스가 `passkey_enclave_state` 나 `Sync Data\LevelDB` 를 열거나 복사하거나 지운 기록이 가장 먼저 볼 단서입니다. 읽기만 한 경우는 [$UsnJrnl](../../filesystem/usnjrnl.md)에 남지 않으므로 EDR·Sysmon 의 파일 이벤트나 파일 접근 감사 기록을 봅니다. $UsnJrnl 에서는 `passkey_enclave_state` 가 지워지거나 새로 만들어진 기록을 찾습니다. Chrome 은 이 파일을 같은 폴더의 임시 파일에 쓴 뒤 이름을 바꿔 덮어쓰므로 이름 바꾸기 기록은 평소 동작입니다[9]. 파일이 지워진 뒤 새로 만들어졌다면 기기를 다시 등록했다는 뜻일 수 있습니다. 상태 파일을 지우거나 고친 뒤 등록·복구 과정이 불필요하게 되풀이되면 따로 살펴봅니다[7].
+
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
@@ -306,3 +374,6 @@ SELECT key, value FROM meta;
 4. Chromium 소스 — SQLite 계층. 시각 저장 형식과 저널 방식, `secure_delete`([sql/database.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/sql/database.cc), [sql/statement.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/sql/statement.cc)).
 5. Will Harris, "Improving the security of Chrome cookies on Windows", Google Online Security Blog, 2024-07-30. <https://security.googleblog.com/2024/07/improving-security-of-chrome-cookies-on.html>
 6. Obsidian Forensics, Hindsight. <https://github.com/obsidianforensics/hindsight>
+7. Arie Olshtein, "Pass the Passkey: A Novel Attack Surface in Passwordless Authentication", Palo Alto Networks Unit 42, 2026-08-03. <https://unit42.paloaltonetworks.com/passwordless-authentication-security-risks/>
+8. Chromium 소스 — 패스키 동기화. 레코드 필드([webauthn_credential_specifics.proto](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/sync/protocol/webauthn_credential_specifics.proto)), 저장과 마지막 사용 시각 기록([passkey_sync_bridge.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/webauthn/core/browser/passkey_sync_bridge.cc)), 시각을 고치는 때([gpm_enclave_transaction.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/browser/webauthn/gpm_enclave_transaction.cc)), LevelDB 키 모양([blocking_data_type_store_impl.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/sync/model/blocking_data_type_store_impl.cc), [data_type.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/sync/base/data_type.cc)).
+9. Chromium 소스 — 패스키 기기 등록 상태. 파일 이름·쓰기·읽기([enclave_manager.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/browser/webauthn/enclave_manager.cc)), 필드([enclave_local_state.proto](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/browser/webauthn/proto/enclave_local_state.proto)), 프로필 폴더에 두는 것([enclave_manager_factory.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/chrome/browser/webauthn/enclave_manager_factory.cc)), 임시 파일에 쓴 뒤 바꾸는 방식([important_file_writer.cc](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/base/files/important_file_writer.cc)).

@@ -78,6 +78,62 @@ ALEAPP 가 풀어 주는 숫자는 이 아홉 개이고, 표에 없는 숫자가
 
 기기 시계를 사람이 바꾸면 그 뒤 이벤트의 시스템 시계 시각도 따라 바뀔 수 있습니다. `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 에서 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
 
+## 삼성 디지털 웰빙의 시간대 변경 기록
+
+삼성 기기의 디지털 웰빙 앱(`com.samsung.android.forest`)은 공용 DB `dwbCommon.db` 의 `Logging` 표에 기기 시간대가 바뀐 때를 이전 시간대·새 시간대와 함께 한 줄씩 적습니다 [2][3]. 위에서 다룬 Google 앱의 `app_usage` DB 와는 다른 앱의 다른 DB 입니다. 시스템 속성과 설정 값에는 현재 시간대만 남아서 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md), 과거에 기기가 어느 시간대에 있었는지 찾을 때 이 표를 봅니다.
+
+### 위치와 구조
+
+DB 는 아래 경로에 있고, ALEAPP 는 `*/com.samsung.android.forest/databases/dwbCommon.db*` 패턴으로 이 파일을 찾습니다 [2][3]. ALEAPP 는 2026.3.0 판부터 이 기록을 읽고 [2], ALEAPP 시험 데이터 가운데 Android 10 갤럭시 S10 이미지와 Android 14 이미지에서 각각 한 줄씩 나옵니다 [3].
+
+```
+/data/data/com.samsung.android.forest/databases/dwbCommon.db
+```
+
+| 열 | 담긴 것 |
+|---|---|
+| `timeStamp` | 이 줄의 시각. 단위는 아래 시각 해석 참고 |
+| `key` | 기록 종류. 시간대 변경 줄에는 `UsageDataManager::timeZoneChanged()` 가 들어 있습니다 |
+| `Value` | 이전 시간대와 새 시간대 |
+
+ALEAPP 는 `key` 에 `UsageDataManager::timeZoneChanged()` 가 들어 있는 줄만 `LIKE` 로 골라 읽습니다 [3]. `Value` 는 `, ` 로 나뉜 두 부분이고, 앞부분은 `prevTimezone( ` 으로, 뒷부분은 `newTimezone( ` 으로 시작합니다. ALEAPP 는 이 앞에 붙은 글자와 각 부분의 마지막 한 글자를 떼어 내고 남은 값을 이전 시간대(Previous Timezone)와 새 시간대(New Timezone)로 보여 줍니다 [3]. 시간대가 `Asia/Seoul` 같은 시간대 ID 로 적히는지, UTC 와의 차이로 적히는지는 실제 `Value` 를 열어 확인하고, 파서가 떼어 낸 결과가 원래 값과 맞는지도 함께 봅니다. `Logging` 표에는 다른 `key` 의 줄도 들어 있어서 `SELECT DISTINCT key FROM Logging` 으로 어떤 기록이 함께 있는지 먼저 봅니다.
+
+### 시각 해석
+
+`timeStamp` 는 유닉스 에포크 기준 값이고, ALEAPP 는 단위를 정해 두지 않고 값의 크기로 판단해 UTC 로 바꿉니다 [3][4]. 값이 10^10 이상이면 밀리초, 10^13 이상이면 마이크로초, 10^16 이상이면 나노초로 읽으므로 [4], 직접 읽을 때도 자릿수부터 확인합니다. 2001-09-09 부터 2286년 사이의 날짜를 밀리초로 적으면 13자리입니다.
+
+변경 줄을 시각순으로 늘어놓으면 기기 시간대가 어느 구간에 어떤 값이었는지 나옵니다. 현지 시각 문자열로 적힌 다른 기록(logcat 등)은 확보 시점의 시간대가 아니라 그 기록의 시각이 속한 구간의 시간대로 UTC 로 바꿉니다. 첫 변경 줄보다 이른 구간은 그 줄의 이전 시간대로 볼 수 있지만, 이 표에 남은 가장 오래된 줄 앞에 다른 변경이 있었는지는 이 표만으로 알 수 없습니다.
+
+시간대 변경은 시계(유닉스 시각) 자체를 바꾸는 일과 다른 사건입니다. 위의 usagestats `Time changed` 줄이나 [시각 바꾸기 (Time Change)](../../04-scenarios/activity/anti-forensics/time-change.md) 에서 다루는 시계 변경 흔적과 섞어 읽지 않습니다.
+
+### 증거로서 의미
+
+**증명하는 것**
+
+그 시각에 디지털 웰빙 앱이 기기 시간대가 이전 값에서 새 값으로 바뀌었다고 적었다는 사실입니다. 새 시간대가 다른 나라나 지역의 시간대라면 그 무렵 기기가 다른 시간대로 옮겨 갔을 수 있다는 보조 단서가 되고, 위치 기록이 없을 때 출입국·이동 시점을 좁히는 데 씁니다. 이동 여부의 결론은 [그 시각에 어디 있었나 (Location)](../../04-scenarios/activity/location.md) 의 위치 기록과 함께 냅니다.
+
+**증명하지 못하는 것**
+
+사용자가 설정에서 시간대를 직접 바꿨는지, 자동 시간대 기능이 통신망이나 위치로 바꿨는지는 이 줄에 나와 있지 않습니다. 확보 시점의 `auto_time_zone` 값은 그때의 설정일 뿐이라 변경 당시 상태를 알려 주지 않습니다. 그래서 이 줄 하나로 기기가 실제로 그 지역에 있었다고 말할 수 없고, 사람이 일부러 시간대를 바꿨다고 말할 수도 없습니다. 같은 시간대를 쓰는 여러 나라 가운데 어디였는지도 나오지 않고, 변경 줄의 시각을 국경을 넘거나 비행기에서 내린 순간과 같다고 볼 근거도 없습니다. 변경 줄이 없다고 해서 이동이 없었다고 말할 수도 없습니다. 이 표를 며칠치 남기는지는 실제 기기에서 확인해야 하고, 앱 데이터를 지우면 함께 사라질 수 있습니다.
+
+보고서에는 "`dwbCommon.db` 의 `Logging` 표에 2026-08-10 01:23:45 UTC 에 기기 시간대가 A 에서 B 로 바뀌었다는 기록이 있다(만든 예시)" 처럼 기록으로 확인되는 만큼만 씁니다.
+
+### 직접 분석해 보기
+
+DB 사본을 열고 `PRAGMA table_info(Logging)` 으로 열 이름을 먼저 확인합니다. 아래 질의는 `timeStamp` 가 13자리 밀리초일 때의 예시입니다.
+
+```sql
+SELECT timeStamp,
+       datetime(timeStamp / 1000, 'unixepoch') AS utc_time,
+       key,
+       Value
+FROM Logging
+WHERE key LIKE '%UsageDataManager::timeZoneChanged()%'
+ORDER BY timeStamp;
+```
+
+ALEAPP 의 `samsung_wellbeing_timezone` 모듈은 같은 줄을 읽어 Timestamp·Previous Timezone·New Timezone 세 열로 보여 줍니다 [3]. 도구 결과를 위 SQL 결과의 `Value` 원문과 맞춰 보면 파서가 시간대 값을 제대로 떼어 냈는지 확인할 수 있습니다.
+
 ## 함정과 한계
 
 첫째, 이 페이지의 표 구조와 숫자 뜻은 ALEAPP 파서가 기대하는 모양이고, 앱 판에 따라 표가 바뀌었을 수 있습니다. 파서가 빈 결과를 내면 표 이름부터 직접 열어 봅니다.
@@ -133,3 +189,6 @@ NIST CFReDS 같은 공개 안드로이드 시험 데이터에 `com.google.androi
 ## 참고 문헌
 
 1. ALEAPP — scripts/artifacts/wellbeing.py — https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/artifacts/wellbeing.py
+2. Kevin Pagano, "Tracking Timezone Changes in Digital Wellbeing" — https://www.stark4n6.com/2026/08/tracking-timezone-changes-in-digital.html
+3. ALEAPP — scripts/artifacts/swellbeing.py — https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/artifacts/swellbeing.py
+4. ALEAPP — scripts/ilapfuncs.py — https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/ilapfuncs.py

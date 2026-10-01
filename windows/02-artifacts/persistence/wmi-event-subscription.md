@@ -133,6 +133,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 - **네임스페이스는 한 곳만 보지 않습니다.** 표준 소비자의 기본 네임스페이스가 OS 마다 다르고, 필터는 `EventNamespace` 로 다른 네임스페이스를 가리킬 수 있습니다.
 - **저장소 내부 구조는 공식 문서가 없습니다.** OBJECTS.DATA 의 페이지 크기와 매핑 방식이 공개되어 있지 않으므로, 오프라인 분석 결과는 켜진 PC 에서 읽은 결과나 다른 도구와 맞춰 봅니다.
 - **호스트 프로세스로 잡는 탐지는 따로 확인합니다.** 소비자를 실행하는 프로세스와 계정은 실제 기기에서 확인한 뒤 탐지 기준으로 씁니다.
+- **시각 조건 필터는 부팅 직후에는 조용합니다.** 필터의 Query 가 `__InstanceModificationEvent` 에 `TargetInstance ISA "Win32_LocalTime"` 과 `Hour`·`Minute` 조건을 붙인 모양이면, 소비자는 부팅 때가 아니라 매일 그 시각에 실행됩니다[3]. `Hour` 는 그 PC 의 현지 시각(24시간제)이고, `Second` 조건이 없으면 그 1분 동안 1초마다 알림이 생겨 모두 60번이 됩니다[3]. 2026년 8월에 공개된 백도어 사례에서는 19시 50분 조건 필터를 써서, 아침에 다시 켠 PC 에서는 저녁까지 아무것도 실행되지 않았습니다[4]. 그래서 부팅 직후 기록만 보지 말고 Query 의 시각 조건을 읽은 뒤, 그 시각 앞뒤의 [프로세스 생성](../event-logs/4688.md) 기록을 찾습니다. 같은 사례에서 필터·소비자·바인딩 이름은 모두 실제 오디오 제품 제조사 이름인 "Realtek" 이었고, `CommandLineEventConsumer` 의 명령줄은 `Program Files` 대신 8.3 짧은 이름 (8.3 short name) 인 `Progra~1` 로 경로를 적었습니다[4]. 이름만 보고 정상 구독으로 넘기지 말고, 짧은 이름 경로를 긴 경로로 풀어 실제 파일을 확인합니다. 이 백도어는 설정을 `C:\ProgramData\desktop.ini` 안에 저장했습니다[4].
 
 ## 직접 분석해 보기
 
@@ -195,3 +196,5 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 
 1. Microsoft Learn, *Receiving Events at All Times* (ms.date 2018-05-31). 영구 소비자의 수명, 필터·소비자·바인딩 구성, 필요할 때 메모리에 올리는 방식, WinMgmt 이벤트 ID 10. https://learn.microsoft.com/en-us/windows/win32/wmisdk/receiving-events-at-all-times
 2. Microsoft Learn, *Monitoring and Responding to Events with Standard Consumers* (ms.date 2018-05-31). 표준 소비자 5종, 기본 네임스페이스, CreatorSID 일치 조건, EventNamespace 와 root\default, 실패 이벤트. https://learn.microsoft.com/en-us/windows/win32/wmisdk/monitoring-and-responding-to-events-with-standard-consumers
+3. Microsoft Learn, *Win32_LocalTime class* (ms.date 2018-05-31). Hour 속성의 현지 시각 기준, `__InstanceModificationEvent` 의 TargetInstance, Second 조건을 뺀 쿼리의 알림 횟수. https://learn.microsoft.com/en-us/previous-versions/windows/desktop/wmitimepprov/win32-localtime
+4. Gen Digital, Milánek, *A 12 KB Backdoor Hid Its C2 Domain in desktop.ini Whitespace* (2026-08-14). 19시 50분 조건 필터를 쓴 "Realtek" 이름의 WMI 구독, 8.3 짧은 이름 경로, desktop.ini 설정 저장. https://www.gendigital.com/blog/insights/research/kb-backdoor
