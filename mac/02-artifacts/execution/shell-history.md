@@ -108,6 +108,9 @@ mac_apt 의 TERMSESSIONS 플러그인은 `~/.bash_sessions` 와 `~/.zsh_sessions
 - **파일 위치 이동.** `ZDOTDIR` 을 설정하면 기록 파일이 홈 폴더가 아닌 곳에 생깁니다 [2]. 홈 폴더에 `.zsh_history` 가 없으면 설정 파일에서 `ZDOTDIR`·`HISTFILE` 을 먼저 찾습니다.
 - **세션 폴더를 빠뜨리는 경우.** 홈 폴더의 `.zsh_history`·`.bash_history` 만 보면 `~/.zsh_sessions`·`~/.bash_sessions` 에 따로 남은 명령을 놓칩니다 [4][5].
 - **가장 오래된 세션.** 세션 파일을 앞 파일과 비교해 나누는 방식에서는 가장 오래된 `.history` 에 비교할 앞 파일이 없어서, 그 전 세션의 명령이 섞여 나올 수 있습니다 [4]. 앞뒤 파일의 공통 부분이 이어지지 않으면 중간 세션 파일이 지워졌을 가능성이 있습니다 [4].
+- **외부 프로그램을 부르지 않는 명령.** zsh 는 `zmodload` 명령으로 모듈을 불러와, 따로 실행 파일이 하던 일을 셸 내장 명령으로 처리합니다 [9]. `zsh/net/tcp` 는 TCP 소켓, `zsh/net/socket` 은 유닉스 도메인 소켓, `zsh/attr` 는 확장 속성 (extended attribute, xattr) 을 다루고, `zsh/mapfile` 은 파일 내용을 연관 배열로 읽고 씁니다 [9]. 이 모듈로 한 작업에는 `curl`·`nc`·`xattr`·`cat` 같은 프로그램이 실행되지 않아서, 네트워크 연결과 파일·확장 속성 변경이 모두 이미 떠 있던 `/bin/zsh` 프로세스 안에서 일어납니다 [10]. 그래서 [통합 로그의 프로세스 실행 기록 (Process Events)](unified-log-process.md)이나 [감사 로그 (OpenBSM Audit)](../logs/openbsm-audit.md)에서 실행된 프로그램 목록만 보고 그 셸이 한 일을 다 알았다고 판단하지 않습니다. 셸 기록이나 [셸 시작 파일 (zshrc·bash_profile)](../persistence/shell-startup-files.md), 스크립트에 이 모듈을 불러오는 `zmodload` 줄이 있으면 외부 명령 없이 이런 작업을 했을 수 있다는 단서로 봅니다.
+
+  이때는 셸 기록과 같은 시간대의 Endpoint Security 이벤트를 함께 봅니다. Endpoint Security 는 확장 속성을 쓸 때 `ES_EVENT_TYPE_NOTIFY_SETEXTATTR`, 지울 때 `ES_EVENT_TYPE_NOTIFY_DELETEEXTATTR`, 유닉스 도메인 소켓에 연결할 때 `ES_EVENT_TYPE_NOTIFY_UIPC_CONNECT` 이벤트를 냅니다 [11]. `zsh/attr` 로 확장 속성을 바꾸면 이 이벤트의 프로세스 실행 파일 경로가 `/bin/zsh`, 서명 ID 가 `com.apple.zsh` 로 나옵니다 [10]. 셸 기록에는 친 명령 문자열이, Endpoint Security 이벤트에는 실제로 바뀐 파일과 그 작업을 한 프로세스가 남으므로, 두 기록을 시각으로 맞춰 봐야 그 셸이 한 일을 되살릴 수 있습니다. Endpoint Security 이벤트는 이벤트를 받아 저장하는 보안 도구나 수집 도구가 그 시각에 돌고 있었을 때만 남고, 어떤 이벤트를 모을지도 도구 설정에 따라 다릅니다([논리 수집 도구](../../03-techniques/process-acquisition/evidence-acquisition/logical-collection.md)의 Aftermath `--es-logs` 기본값 참고).
 - **지우거나 고치기 쉬움.** 기록 파일은 사용자가 지우거나 고칠 수 있는 텍스트 파일입니다. `.zsh_history` 를 지워도 세션 폴더의 `.history` 에 명령이 남을 수 있고 [5], 터미널 창의 화면 내용은 [앱 저장 상태 (Saved Application State)](../file-folder-usage/saved-application-state.md)의 터미널 저장 상태에 남을 수 있습니다. 파일이 비어 있거나 없으면 그 자체를 조사 거리로 보고, 지운 흔적은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 순서로 찾습니다.
 
 ## 직접 분석해 보기
@@ -173,3 +176,6 @@ grep -h 'setopt\|HISTFILE\|ZDOTDIR\|SAVEHIST' zshrc.copy zshrc_Apple_Terminal.co
 6. Yogesh Khatri, "Bash sessions in macOS (and why you need to understand its working)" (2018-05-03) — https://swiftforensics.com/2018/05/bash-sessions-in-macos.html
 7. mac4n6 `yaml/20180930-macOS.yaml` (MacOSBashSessions, Pasquale Stirparo) — https://github.com/pstirparo/mac4n6/blob/master/yaml/20180930-macOS.yaml
 8. Scripting OS X, "Moving to zsh, part 2: Configuration Files" (2019-06-18) — https://scriptingosx.com/2019/06/moving-to-zsh-part-2-configuration-files/
+9. zsh 공식 문서, "Zsh Modules" — https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html
+10. dfir.ch, Stephan Berger, "Living Inside the Shell: zsh Modules on macOS" (2026-09-16) — https://dfir.ch/posts/zsh_modules/
+11. Apple Developer Documentation, Endpoint Security `es_event_type_t` — https://developer.apple.com/documentation/endpointsecurity/es_event_type_t

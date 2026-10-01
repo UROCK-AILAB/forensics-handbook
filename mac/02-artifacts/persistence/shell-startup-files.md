@@ -60,6 +60,23 @@ zsh는 시작 파일을 아래 순서로 읽습니다 [2]. `$ZDOTDIR` 이 정해
 
 `/etc/zshrc`·`/etc/zprofile` 처럼 macOS가 기본으로 넣어 두는 시스템 쪽 파일은 같은 macOS 버전의 깨끗한 설치본과 비교해서 바뀐 줄을 가려냅니다.
 
+## 컴파일된 시작 파일 (.zwc)
+
+zsh는 시작 파일을 평문 대신 미리 컴파일한 파일로 읽을 수 있어서, 평문 시작 파일만 읽으면 셸이 실제로 실행하는 내용을 놓칠 수 있습니다. 위 순서 표의 시작 파일과 로그아웃 파일은 모두 `zcompile` 내장 명령으로 미리 컴파일할 수 있고, 원래 파일 이름 뒤에 `.zwc` 를 붙인 컴파일 파일이 있으면서 원래 파일보다 새로우면 zsh는 원래 파일 대신 컴파일 파일을 읽습니다 [2]. `.zwc` 는 zsh 워드 코드 (zsh word code)의 줄임말입니다 [6]. 시작 파일 안에서 `source`(`.`) 로 불러 읽는 파일에도 같은 규칙이 있어서, `file.zwc` 가 `file` 보다 새롭고 `file` 을 컴파일한 것이면 `file.zwc` 에서 명령을 읽습니다 [6].
+
+그래서 홈의 `.zshrc` 가 깨끗해 보여도, 옆에 있는 `.zshrc.zwc` 가 더 새로우면 셸이 뜰 때 실행되는 것은 `.zshrc.zwc` 의 내용입니다 [5]. 사용자 홈(또는 `$ZDOTDIR`)에서는 `.zshenv.zwc`, `.zprofile.zwc`, `.zshrc.zwc`, `.zlogin.zwc`, `.zlogout.zwc` 를 보고 [5], `/etc/` 의 시스템 시작 파일 옆에도 같은 이름의 `.zwc` 가 있는지 확인합니다 [2]. 평문 시작 파일을 수집하는 도구도 `.zwc` 는 따로 수집 대상에 넣지 않은 경우가 있으므로 [5], 시작 파일을 모을 때 같은 폴더의 같은 이름 `.zwc` 를 수집 목록에 직접 넣습니다. `.zwc` 확장자로 넓게 찾으면 시작 파일 말고도 함수 여러 개를 묶어 컴파일한 다이제스트 파일 (digest file)이 함께 나오는데 [6][8], 이 파일은 시작 파일과 별도로 목록에 적어 둡니다.
+
+**어느 파일이 읽혔는지 판단하기.** 평문과 `.zwc` 의 수정 시각을 비교합니다. `.zwc` 가 더 새로우면 zsh는 `.zwc` 를 읽고, 평문이 더 새로우면 평문을 읽습니다 [2]. 평문이 더 새로운 경우에도 `.zwc` 에는 컴파일할 때의 내용이 남아 있어서, 누군가 평문을 고치거나 지운 뒤에도 그 전 코드를 되살리는 데 쓸 수 있습니다 [8]. 이 비교는 수집한 파일의 수정 시각이 원래 값 그대로일 때만 뜻이 있으므로, 시각을 보존하는 방법으로 수집하고 수정 시각은 바꿀 수 있는 값이라는 점을 감안해 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)에 남은 두 파일의 생성·변경 순서와 맞춰 봅니다.
+
+**내용 확인하기.** `.zwc` 는 컴파일된 형식일 뿐 암호화한 파일이 아니라서 내용을 되살릴 수 있습니다 [5]. 수집한 사본을 분석용 기기에서 아래 순서로 봅니다.
+
+1. `zsh -f -c 'zcompile -t evidence/.zshrc.zwc'` 로 파일을 살펴봅니다(`evidence/` 는 사본을 둔 폴더로, 만든 예시). `-t` 는 첫 줄에 이 파일을 컴파일한 zsh 버전과 읽는 방식(직접 읽기 또는 메모리 매핑)을 보여 주고, 그 아래에 컴파일에 들어간 원래 파일 이름을 나열합니다 [6]. `-f` 는 `RCS` 옵션을 끄는 것과 같아서, 이 셸은 분석용 기기의 `/etc/zshenv` 만 읽고 다른 시작 파일은 읽지 않습니다 [7].
+2. `strings -a -n 4 evidence/.zshrc.zwc | grep -Ei 'https?://|curl|osascript|launchctl|base64'` 처럼 문자열을 뽑아 네트워크 주소, 다른 프로그램을 띄우는 명령, 인코딩된 값이 있는지 봅니다 [5].
+3. 공개 도구 zwc-decompile 의 `zwc-decompile.py` 로 소스와 비슷한 zsh 코드를 되살립니다 [8]. 이 도구는 파일을 zsh로 실행하거나 `source` 하지 않고 파이썬으로 직접 파싱하며, `--strings` 를 붙이면 문자열 표도 함께 출력합니다 [8]. 주석과 원래 줄 배치는 컴파일할 때 사라지므로 결과는 원본 파일이 아니라 재구성한 코드이고, zsh 5.9 의 워드 코드 형식을 기준으로 만들어져 다른 버전에서 컴파일한 파일이면 경고를 냅니다 [8].
+4. 되살린 코드를 같은 이름의 평문 시작 파일과 비교해 평문에 없는 줄을 골라내고, 그 줄은 위 "구조" 절의 두 종류 줄과 같은 방식으로 따라갑니다.
+
+`.zwc` 가 있다는 것만으로 악성이라고 보지 않습니다. `zcompile` 은 원래 함수를 불러오거나 스크립트를 읽을 때 텍스트를 파싱하는 단계를 건너뛰어 빠르게 하려는 기능이라 [6], 사용자가 시작 속도 때문에 만들어 둔 파일일 수 있습니다. 판단은 컴파일된 내용이 평문과 다른지, 다르다면 무엇을 실행하는지로 합니다. 문자열 표에 어떤 주소나 명령이 있다는 것도 그 문자열이 파일에 들어 있다는 뜻일 뿐, 그 코드가 실제로 실행됐다는 뜻은 아닙니다 [8].
+
 ## 증거로서 의미
 
 **증명하는 것.** 시작 파일에 어떤 줄이 있으면 수집한 시점에 그 셸이 뜰 때 그 명령을 실행하도록 설정돼 있었다는 뜻이고, 파일이 사용자 홈에 있는지 `/etc/` 에 있는지로 영향을 받는 계정의 범위를 말할 수 있습니다.
@@ -127,3 +144,7 @@ NIST CFReDS 같은 공개 맥 이미지를 골라 아래 질문을 풀어 봅니
 2. zsh 매뉴얼, "Files" (Startup/Shutdown Files) — https://zsh.sourceforge.io/Doc/Release/Files.html
 3. Phil Stokes, "How Malware Persists on macOS" (SentinelOne, 2022-10-27 갱신) — https://www.sentinelone.com/blog/how-malware-persists-on-macos/
 4. ForensicArtifacts, artifacts/data/macos.yaml (main 브랜치) — https://raw.githubusercontent.com/ForensicArtifacts/artifacts/main/artifacts/data/macos.yaml
+5. Stephan Berger, "The .zshrc.zwc You Forgot to Check" (dfir.ch, 2026-09-22) — https://dfir.ch/posts/compiled_zsh/
+6. zsh 매뉴얼, "Shell Builtin Commands" (`.`, `zcompile`) — https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
+7. zsh 매뉴얼, "Options" (`RCS`) — https://zsh.sourceforge.io/Doc/Release/Options.html
+8. malmoeb/zwc-decompile, README.md (main 브랜치) — https://github.com/malmoeb/zwc-decompile/blob/main/README.md

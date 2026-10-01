@@ -5,7 +5,7 @@ grand_parent: "시나리오 · 행위 재구성"
 nav_order: 3930
 ---
 
-# 보안 프로그램을 끄거나 지웠나 (Defense Evasion)
+# 보안 프로그램을 끄거나 지웠나 (Defense Impairment)
 
 보안 프로그램을 끄거나 설정을 바꾸면 그 일도 기록으로 남습니다. Windows 에 들어 있는 Microsoft Defender 바이러스 백신 (Microsoft Defender Antivirus) 은 실시간 보호 (Real-time protection) 가 꺼지거나 설정이 바뀔 때 운영 로그 (Operational log) 에 이벤트를 남깁니다[1]. 이 페이지는 이 운영 로그로 언제 무엇을 껐는지 찾고 누가 했는지 좁히는 순서를 다룹니다. 탐지 이벤트 1116·1117 의 구조는 [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 에서, 검사 로그와 격리 파일은 [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) 에서 다룹니다. 다른 보안 제품은 제품마다 기록이 달라 여기서 다루지 않습니다.
 

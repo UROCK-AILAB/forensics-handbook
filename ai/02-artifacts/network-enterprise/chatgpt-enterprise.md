@@ -78,7 +78,7 @@ Purview 감사는 조직에 등록한 제3자 AI 앱을 `ConnectedAIAppInteracti
 |---|---|---|
 | 계정 탈취 | 공격자가 들어왔나, 들어와서 무엇을 했나 | 인증 로그(로그인 활동), 대화 로그(그 뒤의 사용자 활동) |
 | 접근 유지·권한 상승 | 오래 쓸 접근 경로를 만들었거나 권한을 높였나 | 감사 로그(관리·접근 변경) |
-| 방어 회피 | 로깅·ID·네트워크 통제를 약하게 했나 | 감사 로그(보안·관리 변경) |
+| 방어 약화 (Defense Impairment)[8] | 로깅·ID·네트워크 통제를 약하게 했나 | 감사 로그(보안·관리 변경) |
 | 데이터 노출 | 어떤 데이터가 OpenAI 로 갔고, 모델이 무엇을 받고 돌려줬나 | 대화 로그(프롬프트와 응답, 남아 있으면 파일·GPT·메모리) |
 | 에이전트·Codex 악용 | 에이전트가 무엇을 시도했고, 누가 시작했고, 무엇이 실행됐나 | Codex 사용 로그(받을 수 있는 이벤트·경로·스키마·보관·권한부터 확인), 대화 로그(프롬프트와 응답, 남아 있으면 파일·GPT·메모리) |
 
@@ -140,3 +140,4 @@ COMPLIANCE_API_KEY=<KEY> ./download_compliance_files.sh "<workspace_id>" AUTH_LO
 5. Compliance API and audit events — OpenAI — https://learn.chatgpt.com/docs/enterprise/compliance-api
 6. download_compliance_files.sh (Compliance API 로그 내려받기 스크립트) — OpenAI — https://learn.chatgpt.com/downloads/compliance-api/download_compliance_files.sh
 7. Invictus Incident Response, Frontier Forensics: OpenAI, Version 1.0 (2026-08) — https://www.invictus-ir.com/
+8. Defense Impairment, Tactic TA0112 — MITRE ATT&CK (v19, 생성 2026-04-14) — https://attack.mitre.org/tactics/TA0112/

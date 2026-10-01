@@ -81,6 +81,10 @@ Graph 로 받은 경고 한 건에서 조사에 쓰는 속성은 아래와 같�
 
 `ActionType` 과 `ActivityType` 이 활동 종류, `ObjectName`·`ObjectType`·`ObjectId` 가 대상 개체, `AccountObjectId`·`AccountId`·`AccountDisplayName` 이 행위 계정, `IPAddress`·`CountryCode`·`City`·`Isp`·`UserAgent` 가 접속 환경입니다[4]. `RawEventData` 에는 원래 앱·서비스가 만든 원시 이벤트가 JSON 으로 들어갑니다[4]. Microsoft 365 활동이면 통합 감사 로그의 같은 활동 `AuditData` 와 필드별로 맞춰 봅니다. `IsImpersonated` 는 다른 사용자를 대신해 한 활동인지, `IsAnonymousProxy` 는 IP 가 알려진 익명 프록시인지를 나타냅니다[4]. `LastSeenForUser` 는 속성별로 마지막으로 본 뒤 지난 일수(0 은 오늘, 음수는 처음 봄)이고, `UncommonForUser` 는 그 사용자에게 드문 속성 목록입니다[4].
 
+### Safe Links 로 감싼 URL
+
+Safe Links 는 메일 속 URL 을 `*.safelinks.protection.outlook.com` 주소로 바꿔 써 두고, 사용자가 누를 때 목적지를 검사합니다[12]. 바꿔 쓴 주소의 `url` 매개변수에는 원래 목적지가, `data` 매개변수에는 `|` 로 나눈 값 목록이 들어갑니다[13]. `data` 형식은 Microsoft 가 문서로 공개하지 않았고 실제 주소를 모아 거꾸로 풀어낸 것이라, 형식 버전마다 필드 수가 다릅니다[12][13]. `data` 를 `|` 로 나눠 0부터 세면 0번은 형식 버전(`01`~`05`), 2번은 받는 사람 메일 주소, 3번은 메시지별 GUID 로 보이는 값, 4번은 테넌트 GUID 로 보이는 값, 7번은 시각, 8번은 검사 결과(`Unknown`·`Bad`), 9번은 base64 로 인코딩한 검사 정보이고, unfurl 로 이 값들을 풀 수 있습니다[12][13]. 시각은 v02 부터, 검사 결과와 검사 정보는 v03 부터 들어갑니다[13]. v05 는 Office 데스크톱·Teams·Office 웹 앱에서 누를 때 검사한 경우 11~13번에 Teams 대화·메시지 ID 나 세션·문서 GUID 로 보이는 값을 넣고, 그 밖에는 비워 둡니다[13]. 9번을 base64 로 풀면 `Mailflow`·`ThreatIntel`·`OfficeClient`·`Teams`·`WAC` 같은 Defender 구성 요소 이름 뒤에 `|` 와 JSON 이 이어집니다[13]. 7번 값은 .NET DateTime 틱 (ticks), 곧 0001-01-01 00:00 부터 센 100나노초 단위 수이고, unfurl 은 여기서 621355968000000000 을 빼 1970-01-01 기준 초로 바꾼 뒤 UTC 로 보여 줍니다[14]. 풀어 낸 날짜는 대개 검사 시각이나 만료 시각으로 볼 만하지만 어느 쪽인지 정해진 뜻이 없으므로, 보고서에는 클릭 시각이 아니라 "`data` 안의 시각" 으로 적습니다[13]. 메일 본문이나 브라우저 기록에서 이런 주소를 찾으면 Safe Links 가 그 링크를 바꿔 썼다는 점을 알 수 있고, 2번이 채워져 있으면 누구 앞으로 바꿔 썼는지, 4번 값으로 어느 테넌트였는지 짐작할 수 있습니다[13]. 반면 메일 본문의 주소는 아무도 누르지 않아도 남고 2번 받는 사람은 비어 있는 경우가 많아서, 이 주소만으로는 누가 언제 눌렀는지 증명하지 못합니다[12][13]. 클릭은 브라우저 기록의 방문 시각과 `UrlClickEvents` 로 따로 확인합니다[3].
+
 ## 증거로서 의미
 
 **증명하는 것**
@@ -194,3 +198,6 @@ EmailEvents
 9. Microsoft, "Office 365 Management Activity API schema", Microsoft Learn, 2026-08-26 갱신. https://learn.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-schema
 10. Invictus Incident Response, Microsoft-Extractor-Suite, `Scripts/Get-SecurityAlerts.ps1`. https://github.com/invictus-ir/Microsoft-Extractor-Suite
 11. SigmaHQ, sigma, `rules/cloud/m365/threat_management/microsoft365_susp_inbox_forwarding.yml`. https://github.com/SigmaHQ/sigma
+12. Ryan Benson, "Parsers for Gmail, Outlook Safe Links, Social Media IDs added in Unfurl", Hindsight Foundry, 2026-09-25. https://hindsig.ht/blog/unfurl-parses-gmail-safe-links-and-social-media-ids/
+13. Ryan Benson, unfurl v2026.09, `unfurl/parsers/parse_safelinks.py`. https://github.com/RyanDFIR/unfurl/blob/main/unfurl/parsers/parse_safelinks.py
+14. Ryan Benson, unfurl v2026.09, `unfurl/parsers/parse_timestamp.py` (`decode_datetime_ticks`). https://github.com/RyanDFIR/unfurl/blob/main/unfurl/parsers/parse_timestamp.py

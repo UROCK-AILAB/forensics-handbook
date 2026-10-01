@@ -10,6 +10,12 @@ nav_exclude: true
 
 [첫 화면으로 돌아가기](index.md)
 
+## 2026-10-02
+
+- macOS: [셸 시작 파일](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/persistence/shell-startup-files.html)에 컴파일된 zsh 시작 파일 (.zwc) 내용을, [터미널 명령 기록](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/execution/shell-history.html)에 zsh 모듈로 한 작업의 흔적 내용을 추가했습니다.
+- Cloud: [감사 로그](https://urock-ailab.github.io/forensics-handbook/cloud/02-artifacts/m365/entra-logs/audit-logs.html)에 Entra ID 외부 인증 방법 등록·변경 흔적 내용을, [Defender 경고와 기록](https://urock-ailab.github.io/forensics-handbook/cloud/02-artifacts/m365/defender-xdr.html)에 Safe Links 주소에서 받는 사람·시각을 꺼내는 내용을 추가했습니다.
+- Windows·Cloud·AI: MITRE ATT&CK v19 에 맞춰 전술 이름(Stealth, Defense Impairment)을 고쳤습니다.
+
 ## 2026-10-01
 
 - Windows: [저장 비밀번호 (Login Data)](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/login-data.html)에 동기화된 패스키 내용을, [WMI 영구 이벤트 구독](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/persistence/wmi-event-subscription.html)에 시각 조건으로 실행되는 구독 내용을, [랜섬웨어는 언제 어떻게 퍼졌나](https://urock-ailab.github.io/forensics-handbook/windows/04-scenarios/incident/ransomware.html)에 관리용 PC 의 SSHFS-Win·WinFsp 흔적 내용을 추가했습니다.

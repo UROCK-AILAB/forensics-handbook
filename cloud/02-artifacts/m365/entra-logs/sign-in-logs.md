@@ -132,6 +132,7 @@ Log Analytics 에서는 `CreatedDateTime` 이 Entra 가 인증을 처리한 시�
 
 - **Graph 활동 로그 (Microsoft Graph activity logs)**: 로그인 뒤에 어떤 Graph API 를 불렀는지 보여 주고, `SignInActivityId` 를 로그인 로그의 `UniqueTokenIdentifier` 와 맞춰 잇습니다[9]. P1·P2 가 필요하고 진단 설정 목적지에만 저장되며, 대개 30분 안에(드물게 2시간까지) 도착합니다[9].
 - **[감사 로그](audit-logs.md)**: 로그인 직후 인증 수단 등록·앱 동의·역할 부여 같은 변경이 이어졌는지 봅니다.
+- **[외부 인증 방법 추가와 변경](audit-logs.md#외부-인증-방법-추가와-변경)**: 낯선 발급자를 거쳐 다단계 인증을 통과한 로그인이면 그 공급자를 누가 언제 등록했는지 봅니다.
 - **[위험 탐지](identity-protection.md)**: 같은 로그인에 붙은 위험 판정과 탐지 시각을 봅니다.
 - **[통합 감사 로그](../unified-audit-log/index.md)와 [Exchange Online](../exchange-online/index.md)**: 같은 IP·같은 시간대에 메일함·파일 작업이 있었는지 봅니다.
 

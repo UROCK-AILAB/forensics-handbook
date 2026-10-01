@@ -529,5 +529,5 @@ Windows 시스템에 남는 흔적을 어떻게 읽고 해석하는지 정리한
   - [완전삭제 도구를 썼나 (Wiping Tools)](04-scenarios/activity/anti-forensics/wiping-tools.md)
   - [PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)](04-scenarios/activity/anti-forensics/reset-reinstall.md)
   - [시스템 시각을 바꿨나 (System Time Change)](04-scenarios/activity/anti-forensics/system-time-change.md)
-  - [보안 프로그램을 끄거나 지웠나 (Defense Evasion)](04-scenarios/activity/anti-forensics/defense-evasion.md)
+  - [보안 프로그램을 끄거나 지웠나 (Defense Impairment)](04-scenarios/activity/anti-forensics/defense-evasion.md)
 

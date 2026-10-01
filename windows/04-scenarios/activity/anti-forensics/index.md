@@ -51,7 +51,7 @@ has_toc: false
 2. [완전삭제 도구를 썼나 (Wiping Tools)](wiping-tools.md) — SDelete 와 `cipher /w` 를 예로 도구 실행 기록과 파일 이름을 바꾼 기록을 찾습니다. 파일을 골라 지웠는지, 빈 공간을 지웠는지도 가려냅니다.
 3. [PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)](reset-reinstall.md) — 초기화 옵션마다 남는 것과 지워지는 것을 정리합니다. `C:\Windows.old` 와 OS 가 아닌 파티션에서 초기화 전 기록을 찾습니다.
 4. [시스템 시각을 바꿨나 (System Time Change)](system-time-change.md) — 4616 으로 누가 어느 프로세스로 시각을 바꿨는지 가려냅니다. 정상 시각 보정과 나누고, 시각이 틀어진 구간을 표시합니다.
-5. [보안 프로그램을 끄거나 지웠나 (Defense Evasion)](defense-evasion.md) — Defender 운영 로그로 실시간 보호가 꺼진 구간과 바뀐 설정을 찾습니다. 사람이 끈 것과 오류로 멈춘 것을 나눕니다.
+5. [보안 프로그램을 끄거나 지웠나 (Defense Impairment)](defense-evasion.md) — Defender 운영 로그로 실시간 보호가 꺼진 구간과 바뀐 설정을 찾습니다. 사람이 끈 것과 오류로 멈춘 것을 나눕니다.
 
 ## 함께 볼 페이지
 

@@ -53,7 +53,7 @@ Microsoft 365 통합 감사 로그는 관리자가 끌 수 있지만, 켜고 끈
 |---|---|---|---|
 | 1 | AWS CloudTrail 이벤트 기록·트레일 | 트레일 중지·변경·삭제, 이벤트 선택자 변경, 로그 버킷·CloudWatch Logs 변경 | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) |
 | 2 | CloudTrail 다이제스트 파일 | 로그 파일이 전달되지 않은 시간, 전달 뒤 바뀌거나 지워진 파일 | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) |
-| 3 | GuardDuty 결과 | 트레일 중지·삭제, 방어 회피 API 이상 호출 | [GuardDuty](../../02-artifacts/aws/guardduty.md) |
+| 3 | GuardDuty 결과 | 트레일 중지·삭제, 방어 약화 (Defense Impairment) API 이상 호출 | [GuardDuty](../../02-artifacts/aws/guardduty.md) |
 | 4 | Azure 활동 로그 | 진단 설정 삭제, Log Analytics 데이터 삭제·작업 영역 삭제, 경고 억제 규칙 | [활동 로그](../../02-artifacts/azure/activity-log.md), [리소스 로그와 진단 설정](../../02-artifacts/azure/resource-logs.md) |
 | 5 | Microsoft 365 통합 감사 로그·설정 | 감사 켜기·끄기, 메일함 감사 우회, 짧은 보존 정책 | [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md) |
 | 6 | Google Cloud 관리 활동 감사 로그 | 싱크·제외 규칙·로그 버킷 변경, 로그 삭제, 데이터 접근 로그 설정 변경 | [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md) |
@@ -79,7 +79,7 @@ Microsoft 365 통합 감사 로그는 관리자가 끌 수 있지만, 켜고 끈
 | GuardDuty | `guardduty.amazonaws.com` | `DeleteDetector`, 또는 `requestParameters.enable` 이 `false` 인 `UpdateDetector`[9] |
 | CloudWatch Logs | `logs.amazonaws.com` | `DeleteLogGroup`, `DeleteLogStream`, `PutRetentionPolicy`, `DeleteRetentionPolicy`, `DeleteSubscriptionFilter`, `DeleteMetricFilter` 등[7] |
 
-GuardDuty 를 켜 두었다면 결과 (Finding) 로도 드러납니다. `Stealth:IAMUser/CloudTrailLoggingDisabled` 는 트레일 삭제·갱신이 성공했거나 GuardDuty 와 연결된 트레일의 로그 버킷이 지워졌을 때 생기고 기본 심각도는 Low 입니다[6]. `DefenseEvasion:IAMUser/AnomalousBehavior` 는 `DeleteFlowLogs`, `DisableAlarmActions`, `StopLogging` 같은 방어 회피 API 를 평소와 다르게 부른 경우이고 기본 심각도는 Medium 입니다[6]. Bedrock 모델 호출 로그를 끈 경우는 `DefenseEvasion:IAMUser/BedrockLoggingDisabled` 로 나옵니다[6].
+GuardDuty 를 켜 두었다면 결과 (Finding) 로도 드러납니다. `Stealth:IAMUser/CloudTrailLoggingDisabled` 는 트레일 삭제·갱신이 성공했거나 GuardDuty 와 연결된 트레일의 로그 버킷이 지워졌을 때 생기고 기본 심각도는 Low 입니다[6]. `DefenseEvasion:IAMUser/AnomalousBehavior` 는 `DeleteFlowLogs`, `DisableAlarmActions`, `StopLogging` 같은 방어 약화 API 를 평소와 다르게 부른 경우이고 기본 심각도는 Medium 입니다[6][33]. Bedrock 모델 호출 로그를 끈 경우는 `DefenseEvasion:IAMUser/BedrockLoggingDisabled` 로 나옵니다[6].
 
 ### 2. AWS — 다이제스트로 빈 기간과 변조 확인
 
@@ -236,3 +236,4 @@ GitHub Enterprise 감사 로그의 `action` 에서 `audit_log_streaming.destroy`
 30. GitHub, "Streaming the audit log for your enterprise", GitHub Enterprise Cloud Docs. https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise
 31. GitHub, "Audit log events for your enterprise", GitHub Enterprise Cloud Docs. https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/audit-log-events-for-your-enterprise
 32. Google Cloud, "Quotas and limits", Cloud Logging 문서 (Last updated 2026-09-25). https://cloud.google.com/logging/quotas
+33. MITRE ATT&CK, "Disable or Modify Tools: Disable or Modify Cloud Log, T1685.002" (v19, Last Modified 2026-05-12). https://attack.mitre.org/techniques/T1685/002/

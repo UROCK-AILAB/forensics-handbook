@@ -138,7 +138,7 @@ wevtutil [Process] [Log Name] /r:[Destination]
 - [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) — 로그 파일이 줄어든 기록입니다.
 - [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 지우기 전 로그 파일을 찾습니다.
 - [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) — 이벤트를 규칙으로 찾는 법입니다.
-- [보안 프로그램을 끄거나 지웠나 (Defense Evasion)](defense-evasion.md) — 로그를 지우기 전후에 보안 프로그램을 건드렸는지 봅니다.
+- [보안 프로그램을 끄거나 지웠나 (Defense Impairment)](defense-evasion.md) — 로그를 지우기 전후에 보안 프로그램을 건드렸는지 봅니다.
 
 ## 참고 문헌
 

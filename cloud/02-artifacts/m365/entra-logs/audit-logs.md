@@ -75,6 +75,20 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 
 권한 관리 (PIM) 는 같은 역할 부여라도 `Add eligible member to role in PIM requested (timebound)` 처럼 요청·완료·취소와 기간 유형을 붙인 이름을 따로 씁니다[2]. 앱 동의와 권한 부여가 무엇을 뜻하는지는 [OAuth 앱과 동의](../../../01-foundations/identity/oauth-consent.md) 에, 역할 구조는 [클라우드 계정과 역할](../../../01-foundations/identity/users-roles.md) 에 있습니다.
 
+## 외부 인증 방법 추가와 변경
+
+외부 인증 방법 (external authentication method, EAM) 은 다단계 인증의 두 번째 단계를 Microsoft 가 아닌 외부 공급자에게 맡기는 기능이고, 지금 Microsoft 문서는 외부 MFA (external MFA) 라고 부릅니다[14]. 사용자가 이 방법을 고르면 Entra ID 가 브라우저를 공급자에게 보내고, 공급자가 서명해 돌려준 토큰이 검증을 통과하면 다단계 인증을 채운 것으로 처리합니다[15]. 그래서 공격자가 만든 공급자가 등록되면 그 공급자가 돌려준 토큰으로도 다단계 인증을 통과합니다[15][18]. 2026년 9월에 공개된 한 시험 테넌트에서는 이렇게 등록한 공급자가 다단계 인증 단계에서 비밀번호 입력 화면을 띄워 비밀번호를 받아 갔고, 비밀번호를 재설정한 뒤에도 다음 로그인에서 새 비밀번호를 다시 받아 갔습니다[18]. 아래에서 "시험에서는" 이라고 적은 값은 모두 이 시험 환경의 값입니다.
+
+**설정이 놓이는 곳과 필요한 역할.** 공급자 정보는 테넌트의 인증 방법 정책 (Authentication methods policy) 에 `externalAuthenticationMethodConfiguration` 유형의 항목으로 들어갑니다[15]. 항목에는 사용자에게 보이는 이름 `displayName`, 공급자 연동 앱의 `appId`, 공급자 OIDC 설정 `openIdConnectSetting`(`clientId`, `discoveryUrl`), 켜짐 여부 `state`(`enabled`·`disabled`), 이 방법을 쓸 그룹 `includeTargets` 와 뺄 그룹 `excludeTargets` 가 있고, `displayName` 은 만든 뒤에 바꿀 수 없습니다[14][16][17]. 관리 센터에서 외부 인증 방법을 추가하려면 최소 Authentication Policy Administrator 역할이 필요하고, 공급자 앱에 관리자 동의 (admin consent) 를 주려면 최소 Privileged Role Administrator 역할이 필요합니다[14]. 동의 없이 저장한 방법은 켤 수 없고, Graph 로 정책을 바꾸려면 `Policy.ReadWrite.AuthenticationMethod` 권한이 있어야 합니다[14]. 변경한 계정이 Authentication Policy Administrator 나 Global Administrator 역할을 언제 받았는지 위 표의 역할 부여 활동으로 함께 확인합니다[14][18].
+
+**감사 로그에 남는 활동.** 외부 인증 방법은 인증 방법 정책 안의 항목이라[15], 감사 로그에서는 인증 방법 정책 변경 활동인 `Authentication Methods Policy Update` 부터 찾고, 정책을 초기화했다면 `Authentication Methods Policy Reset` 도 봅니다. 두 활동 모두 범주는 `ApplicationManagement` 입니다[2]. 무엇을 바꿨는지는 그 항목의 `modifiedProperties` 에서 옛 값과 새 값을 비교해 확인합니다. 시험에서는 공급자 하나를 등록하자 외부 방법 추가, 사용자 개체 갱신, 방법 등록 확인의 세 기록이 차례로 남았고, 시험 사용자의 `SearchableDeviceKey` 속성에 FIDO 키가 하나 붙었습니다[18]. 세 기록의 실제 활동 이름은 받은 데이터에서 `Authentication Methods Policy Update` 앞뒤 몇 분의 항목을 펼쳐 확인합니다. 사용자별 등록은 관리자가 대신 할 수도 있고 사용자가 보안 정보 (Security info) 화면이나 등록 마법사에서 할 수도 있으므로[14], `Admin registered security info` 와 `User registered security info` 를 함께 찾습니다[2]. 외부 인증 방법을 쓸 수 있는 사용자는 인증 방법 등록 보고서에 나오지 않아서[14], 등록 보고서만 보고 판단하면 빠집니다.
+
+**앱 등록과 서비스 주체.** 공급자는 Entra ID 앱 하나로 연동합니다. 이 앱은 Microsoft Graph 의 위임 권한 `openid`·`profile` 을 요청하고, 공급자의 `authorization_endpoint` 를 회신 URL 로 둡니다[15]. 테넌트에서는 이 앱에 관리자 동의를 해야 서비스 주체가 생기고 연동이 동작합니다[15]. 정책 항목의 `appId` 를 기준으로 `Add application`, `Add service principal`, `Consent to application`, `Add delegated permission grant` 기록을 찾아 같은 앱인지 맞춰 보고[2][16], 회신 URL 과 `discoveryUrl` 의 도메인이 테넌트가 계약한 공급자의 것인지 확인합니다. 시험에서 공격용 앱은 `openid`·`profile` 을 요청하고 리디렉션 URI 로 `login.microsoftonline.com/common/federation/externalauthprovider` 를 적었습니다[18]. 이 주소는 공급자가 응답을 돌려보내는 Microsoft 쪽 주소입니다[15]. 같은 시험에서 서비스 주체 생성 기록에는 앱 ID, 로그인 대상 (sign-in audience), 공격자 서버(시험에서는 ngrok 도메인)를 가리키는 회신 URL, 토큰 서명용 키가 담겼습니다[18]. 연구진의 배포 도구는 `Add application`, `Add service principal`, `Add delegated permission grant` 를 몇 초 사이에 연달아 남겼고, 이 Graph 호출의 사용자 에이전트는 모두 `python-requests/2.33.1` 이었습니다[18].
+
+**로그인 로그의 단서.** Entra ID 는 공급자 토큰의 `acr`·`amr` 조합으로 두 번째 단계가 다단계 인증 조건을 채우는지 판단하고, 토큰의 `iss` 는 공급자 discovery 문서의 발급자 (issuer) 값과 글자까지 같아야 합니다[15]. 받아들이는 값은 `acr` 이 `possessionorinherence` 등 일곱 가지, `amr` 이 하드웨어 보안 키 소유 증명을 뜻하는 `hwk` 등 열세 가지입니다[15]. 시험에서는 공급자를 거친 로그인마다 공급자의 발급자 URL 이 남았고, 토큰에는 `acr` 값 `possessionorinherence` 와 `amr` 값 `["hwk"]` 가 들어 있었습니다[18]. 정상 공급자도 같은 값을 돌려줄 수 있으므로 값 하나로 판단하지 않고, 발급자 URL 이 테넌트가 승인한 공급자의 것인지부터 확인합니다. 낯선 발급자를 거쳐 로그인한 사용자를 모두 골라내면 피해 범위가 됩니다. 공급자가 켜져 있으면 재설정한 새 비밀번호도 다음 로그인에서 다시 넘어가므로 비밀번호를 재설정하기 전에 정책에서 그 공급자를 끄고 대상 그룹을 빼야 합니다[18].
+
+**증명하는 것과 증명하지 못하는 것.** 인증 방법 정책 변경 기록으로는 누가 언제 정책을 바꿨는지 확인되지만, 그 공급자가 정상 업체인지, 공급자 화면에서 사용자가 무엇을 입력했는지는 알 수 없습니다. 감사 로그 보관 기간이 지나도 설정은 남아 있으므로, Graph 의 `externalAuthenticationMethodConfiguration` 객체로 현재 값을 읽어 감사 기록과 맞춰 봅니다[16].
+
 ## 증거로서 의미
 
 **증명하는 것.** 어느 주체(`initiatedBy`)가 어느 대상(`targetResources`)에 어떤 활동(`activityDisplayName`)을 했고, 그 시각(UTC)과 결과(`result`)가 무엇이었는지, 그리고 바뀐 속성의 옛 값과 새 값입니다. 보고서에는 "2026-03-02 01:14 UTC 에 계정 A 가 앱 B 에 비밀을 추가한 기록이 있다"(만든 예시) 처럼 기록으로 확인되는 만큼 씁니다.
@@ -195,3 +209,8 @@ AuditLogs
 11. invictus-ir, Microsoft-Extractor-Suite, `Scripts/Get-AzureEntraGraphLogs.ps1`. https://github.com/invictus-ir/Microsoft-Extractor-Suite/blob/main/Scripts/Get-AzureEntraGraphLogs.ps1
 12. CISA, Untitled Goose Tool, `goosey/entra_id_datadumper.py`. https://github.com/cisagov/untitledgoosetool/blob/develop/goosey/entra_id_datadumper.py
 13. Microsoft, "Microsoft Entra activity log integration options and considerations" (ms.date 2025-05-27). https://github.com/MicrosoftDocs/entra-docs/blob/main/docs/identity/monitoring-health/concept-log-monitoring-integration-options-considerations.md
+14. Microsoft, "How to manage external MFA in Microsoft Entra ID" (ms.date 2026-02-24). https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-authentication-external-method-manage
+15. Microsoft, "Microsoft Entra External MFA Method Provider Reference" (ms.date 2026-02-23). https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-external-method-provider
+16. Microsoft, "externalAuthenticationMethodConfiguration resource type", Microsoft Graph v1.0 (ms.date 2026-01-19). https://learn.microsoft.com/en-us/graph/api/resources/externalauthenticationmethodconfiguration
+17. Microsoft, "openIdConnectSetting resource type", Microsoft Graph v1.0 (ms.date 2026-01-19). https://learn.microsoft.com/en-us/graph/api/resources/openidconnectsetting
+18. Elad Ghvarh, "TrustSink", Varonis Threat Labs (2026-09-16). https://www.varonis.com/blog/trustsink

@@ -65,7 +65,7 @@ API 호출 로깅의 기본값은 "모든 프로젝트" 가 아니라 "호출 �
 | 키와 인증서 | `certificate.created`, `certificate.updated`, `certificate.deleted`, `certificates.activated`, `certificates.deactivated`, `external_key.registered`, `external_key.removed` | 인증서를 만들고 없앤 이력과 적용 여부 변경, 고객 관리 키를 등록하거나 뺀 일 |
 | 파괴 행위와 인프라 | `resource.deleted`, `tunnel.created`, `tunnel.updated`, `tunnel.deleted`, `checkpoint.permission.created`, `checkpoint.permission.deleted` | 리소스 삭제와 인프라 수준의 관리 활동 |
 
-계정 탈취를 조사할 때는 `login.succeeded` 로 들어온 시각과 행위자를 잡은 뒤, 같은 행위자가 이어서 남긴 `user.*`, `project.*`, `api_key.*` 와 역할 이벤트로 넘어갑니다[1]. 방어 회피를 의심하면 `scim.disabled`, IP 허용 목록 변경·삭제, 외부 키·인증서 이벤트, 조직 설정 변경, API 호출 로깅 설정 변경을 봅니다[1].
+계정 탈취를 조사할 때는 `login.succeeded` 로 들어온 시각과 행위자를 잡은 뒤, 같은 행위자가 이어서 남긴 `user.*`, `project.*`, `api_key.*` 와 역할 이벤트로 넘어갑니다[1]. 방어 약화 (Defense Impairment)[5] 를 의심하면 `scim.disabled`, IP 허용 목록 변경·삭제, 외부 키·인증서 이벤트, 조직 설정 변경, API 호출 로깅 설정 변경을 봅니다[1].
 
 ChatGPT 작업 공간의 인증 로그와 API 플랫폼 감사 로그는 필드가 다릅니다. API 감사 로그에 있는 필드가 ChatGPT 인증 로그에도 있다고 가정하지 않습니다[1].
 
@@ -167,3 +167,4 @@ OpenAI 쪽 기록만으로 사건 전체를 알 수는 없고, ID 제공자, 엔
 2. Data controls in the OpenAI platform — OpenAI API 문서 — https://developers.openai.com/api/docs/guides/your-data
 3. Tracing — OpenAI Agents SDK (Python) 문서 — https://openai.github.io/openai-agents-python/tracing/
 4. Admin APIs — OpenAI API 문서 — https://developers.openai.com/api/docs/guides/admin-apis
+5. Defense Impairment, Tactic TA0112 — MITRE ATT&CK (v19, 생성 2026-04-14) — https://attack.mitre.org/tactics/TA0112/

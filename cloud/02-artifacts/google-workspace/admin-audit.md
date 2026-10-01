@@ -175,7 +175,7 @@ BigQuery 표는 `time_usec` 열로 하루 단위 파티션(`_PARTITIONTIME`)을 
 
 ### 지우기·조작
 
-관리자는 로그 이벤트를 지우거나 보관 기간을 줄일 수 없습니다[11]. 그래서 흔적을 없애려는 시도는 다른 모양으로 남습니다. 알림 센터에서 알림을 지우면 `alertCenterBatchDeleteAlerts` 가 관리 로그에 남고, Cloud Logging 공유를 끄면 그 뒤 새 자료만 Cloud 로 넘어가지 않을 뿐 관리 콘솔 쪽 기록은 그대로입니다[15][16]. 공개 분석 도구 ALFA 는 `ALERT_CENTER_BATCH_DELETE_ALERTS`·`ALERT_CENTER_DELETE_ALERT` 를 방어 회피, `CREATE_EMAIL_MONITOR`·`CREATE_GMAIL_SETTING` 을 메일 수집으로 분류합니다[17]. 조사 흐름은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)에 있습니다.
+관리자는 로그 이벤트를 지우거나 보관 기간을 줄일 수 없습니다[11]. 그래서 흔적을 없애려는 시도는 다른 모양으로 남습니다. 알림 센터에서 알림을 지우면 `alertCenterBatchDeleteAlerts` 가 관리 로그에 남고, Cloud Logging 공유를 끄면 그 뒤 새 자료만 Cloud 로 넘어가지 않을 뿐 관리 콘솔 쪽 기록은 그대로입니다[15][16]. 공개 분석 도구 ALFA 는 `ALERT_CENTER_BATCH_DELETE_ALERTS`·`ALERT_CENTER_DELETE_ALERT` 를 Defense Evasion, `CREATE_EMAIL_MONITOR`·`CREATE_GMAIL_SETTING` 을 메일 수집으로 분류합니다[17]. Defense Evasion 은 ATT&CK v18 까지의 전술 이름이고, ALFA 가 두 알림 삭제 이벤트를 넣은 기법 T1078.004 는 v19 에서 은폐 (Stealth) 에 속합니다[20]. 조사 흐름은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)에 있습니다.
 
 ## 직접 분석해 보기
 
@@ -251,3 +251,4 @@ Workspace 감사 로그가 들어 있는 공개 데이터는 드뭅니다. 시�
 17. Invictus Incident Response, ALFA — Automated Audit Log Forensic Analysis for Google Workspace (README.md, alfa/cmdline.py, alfa/main/collector.py, alfa/config/config.yml, alfa/config/internals.yml, alfa/utils/mappings.yml). https://github.com/invictus-ir/ALFA
 18. SigmaHQ, Google Workspace 탐지 규칙(rules/cloud/gcp/gworkspace/admin, login). https://github.com/SigmaHQ/sigma/tree/master/rules/cloud/gcp/gworkspace
 19. Google, "About reporting logs and BigQuery", Google Workspace 관리자 도움말 (Last updated 2026-09-18). https://knowledge.workspace.google.com/admin/reports/about-reporting-logs-and-bigquery
+20. MITRE ATT&CK, "Valid Accounts: Cloud Accounts, T1078.004" (v19, Last Modified 2026-05-12). https://attack.mitre.org/techniques/T1078/004/

@@ -101,7 +101,7 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 
 1. 토큰 로그에서 `authorize` 이벤트를 찾습니다. 관리 콘솔 메시지 형식은 `{actor} authorized access to {app_name} for {scope} scopes` 이고 매개변수는 `app_name`, `client_id`, `client_type`, `scope`, `scope_data` 입니다[23]. 거부는 `deny`(`rejection_type` 값 `CAA_FOR_OIDC_BLOCK`, `EDU_UNDERAGE_BLOCK`, `EXPLICIT_ADMIN_BLOCK`, `SCOPE_BLOCK`), 요청은 `request`, 철회는 `revoke` 입니다[23].
 2. 같은 `client_id` 의 `activity` 이벤트로 앱이 사용자를 대신해 부른 API 를 봅니다. 메시지 형식은 `{app_name} called {method_name} on behalf of {actor}` 이고 `api_name`, `method_name`, `num_response_bytes` 가 있습니다[23]. 이 이벤트는 위 표의 에디션에서만 남습니다[24]. 토큰 만료처럼 사용자 동작으로 생기지 않은 이벤트에는 IP 가 없을 수 있습니다[24].
-3. 관리 콘솔 감사 로그에서 `AUTHORIZE_API_CLIENT_ACCESS`(도메인 전체 위임 부여, 매개변수 `API_CLIENT_NAME`·`API_SCOPES`·`DOMAIN_NAME`)와 `REMOVE_API_CLIENT_ACCESS` 를 찾습니다[26][28]. 앱 신뢰·차단 목록 변경은 `ADD_TO_TRUSTED_OAUTH2_APPS`, `ADD_TO_TRUSTED_BY_OAUTH_SCOPE_OAUTH2_APPS`, `REMOVE_FROM_BLOCKED_OAUTH2_APPS`, `TRUST_DOMAIN_OWNED_OAUTH2_APPS` 같은 이벤트로 남습니다[27]. ALFA 는 `authorize`·`ADD_TO_TRUSTED_OAUTH2_APPS`·`REMOVE_FROM_BLOCKED_OAUTH2_APPS`·`TRUST_DOMAIN_OWNED_OAUTH2_APPS` 를 방어 회피의 대체 인증 수단 사용(application access token)으로 분류하고, `authorize` 는 응용 프로그램 액세스 토큰 탈취 (steal application access token) 에도 넣습니다[29].
+3. 관리 콘솔 감사 로그에서 `AUTHORIZE_API_CLIENT_ACCESS`(도메인 전체 위임 부여, 매개변수 `API_CLIENT_NAME`·`API_SCOPES`·`DOMAIN_NAME`)와 `REMOVE_API_CLIENT_ACCESS` 를 찾습니다[26][28]. 앱 신뢰·차단 목록 변경은 `ADD_TO_TRUSTED_OAUTH2_APPS`, `ADD_TO_TRUSTED_BY_OAUTH_SCOPE_OAUTH2_APPS`, `REMOVE_FROM_BLOCKED_OAUTH2_APPS`, `TRUST_DOMAIN_OWNED_OAUTH2_APPS` 같은 이벤트로 남습니다[27]. ALFA 는 `authorize`·`ADD_TO_TRUSTED_OAUTH2_APPS`·`REMOVE_FROM_BLOCKED_OAUTH2_APPS`·`TRUST_DOMAIN_OWNED_OAUTH2_APPS` 를 Defense Evasion 의 대체 인증 수단 사용(application access token)으로 분류하고, `authorize` 는 응용 프로그램 액세스 토큰 탈취 (steal application access token) 에도 넣습니다[29]. Defense Evasion 은 ATT&CK v18 까지의 전술 이름이고, 이 기법(T1550.001)은 v19 에서 측면 이동 (Lateral Movement) 에만 속합니다[32].
 
 ### Okta
 
@@ -184,3 +184,4 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 29. ALFA, alfa/utils/mappings.yml. https://github.com/invictus-ir/ALFA
 30. Okta, okta-event-types.csv. https://developer.okta.com/docs/okta-event-types.csv
 31. Okta, "System Log query". https://developer.okta.com/docs/reference/system-log-query/
+32. MITRE ATT&CK, "Use Alternate Authentication Material: Application Access Token, T1550.001" (v19, Last Modified 2026-05-12). https://attack.mitre.org/techniques/T1550/001/
